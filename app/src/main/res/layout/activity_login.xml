@@ -41,11 +41,11 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="0dp"
-        android:hint="Password" />
+        android:hint="Password"
+        android:password="true" />
 
     <Button
         android:id="@+id/btnLogIn"
-        style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etLoginPassword"
@@ -61,9 +61,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnLogIn"
-        android:layout_alignStart="@+id/etLoginUsername"
-        android:layout_alignEnd="@+id/etLoginUsername"
-        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@+id/btnLogIn"
+        android:layout_alignEnd="@+id/btnLogIn"
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="0dp"
