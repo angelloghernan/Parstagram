@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostDetailsActivity">
+
+    <ImageView
+        android:id="@+id/ivDetailsProfilePicture"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvDetailsUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivDetailsProfilePicture"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/ivDetailsProfilePicture"
+        android:fontFamily="sans-serif-black"
+        android:text="Username"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/ivDetailsPostImage"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_below="@+id/ivDetailsProfilePicture"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:maxHeight="200dp"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <ImageButton
+        android:id="@+id/ibDetailsLike"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/ivDetailsPostImage"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="0dp"
+        android:background="@null"
+        android:backgroundTint="#00FFFFFF"
+        android:scaleType="fitStart"
+        app:srcCompat="@drawable/ufi_heart" />
+
+    <ImageButton
+        android:id="@+id/ibDetailsReply"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignTop="@+id/ibDetailsLike"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/ibDetailsLike"
+        android:background="@null"
+        android:backgroundTint="#00FFFFFF"
+        android:scaleType="fitStart"
+        app:srcCompat="@drawable/ufi_comment" />
+
+    <ImageButton
+        android:id="@+id/ibDetailsDM"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignTop="@+id/ibDetailsLike"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/ibDetailsReply"
+        android:background="@null"
+        android:backgroundTint="#00FFFFFF"
+        android:scaleType="fitEnd"
+        android:src="@drawable/direct" />
+
+    <TextView
+        android:id="@+id/tvDetailsDescriptionUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ibDetailsLike"
+        android:layout_alignStart="@+id/ibDetailsLike"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:text="Username"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvDetailsDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvDetailsDescriptionUsername"
+        android:layout_alignBottom="@+id/tvDetailsDescriptionUsername"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/tvDetailsDescriptionUsername"
+        android:text="Description" />
+
+    <TextView
+        android:id="@+id/tvDetailsTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDetailsDescriptionUsername"
+        android:layout_alignStart="@+id/tvDetailsDescriptionUsername"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Time Stamp"
+        android:textSize="12sp" />
+
+</RelativeLayout>
