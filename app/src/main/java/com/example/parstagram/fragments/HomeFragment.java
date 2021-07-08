@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -118,6 +119,8 @@ public class HomeFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+
         queryPosts();
     }
 
@@ -166,9 +169,11 @@ public class HomeFragment extends Fragment {
                 }
 
                 // for debugging purposes: print every post description to log
+                /*
                 for (Post post : posts) {
                     Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
+                 */
 
                 // save received posts to list and notify adapter of new data
                 allPosts.addAll(posts);

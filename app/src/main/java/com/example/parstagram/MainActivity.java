@@ -2,6 +2,7 @@ package com.example.parstagram;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -31,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
         final Fragment my_profile_fragment = new MyProfileFragment();
 
         fragmentManager.beginTransaction().replace(R.id.flContainer, home_fragment).commit();
+
+        // Find the toolbar view inside the activity layout
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        // Sets the Toolbar to act as the ActionBar for this Activity window.
+        // Make sure the toolbar exists in the activity and is not null
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+        toolbar.setSubtitle("");
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 

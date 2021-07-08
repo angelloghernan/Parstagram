@@ -5,17 +5,34 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.loader.content.Loader;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.parstagram.FollowerTableObject;
 import com.example.parstagram.LoginActivity;
+import com.example.parstagram.Post;
 import com.example.parstagram.R;
+import com.parse.CountCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.w3c.dom.Text;
+
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,10 +45,16 @@ public class MyProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    public static final String TAG = "MyProfileFragment";
+
     private String mParam1;
     private String mParam2;
 
     Button btnLogOut;
+    ImageView ivProfileDetailsPicture;
+    TextView tvNumFollowers;
+    TextView tvNumFollowing;
+    TextView tvNumPosts;
 
     public MyProfileFragment() {
         // Required empty public constructor
@@ -74,6 +97,72 @@ public class MyProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         btnLogOut = view.findViewById(R.id.btnLogOut);
+        ivProfileDetailsPicture = view.findViewById(R.id.ivProfileDetailsPicture);
+        tvNumFollowers = view.findViewById(R.id.tvNumFollowers);
+        tvNumFollowing = view.findViewById(R.id.tvNumFollowing);
+        tvNumPosts = view.findViewById(R.id.tvNumPosts);
+
+        ParseUser user = ParseUser.getCurrentUser();
+        ParseFile profilePicture = user.getParseFile("profilePicture");
+
+        if (profilePicture != null) {
+            Glide.with(view.getContext())
+                    .load(Objects.requireNonNull(profilePicture.getUrl()))
+                    .placeholder(ResourcesCompat.getDrawable(view.getResources(),
+                            R.drawable.instagram_profile_default, view.getContext().getTheme()))
+                    .circleCrop()
+                    .into(ivProfileDetailsPicture);
+        } else {
+            Glide.with(view.getContext())
+                    .load(ResourcesCompat.getDrawable(view.getResources(),
+                            R.drawable.instagram_profile_default, view.getContext().getTheme()))
+                    .circleCrop()
+                    .into(ivProfileDetailsPicture);
+        }
+
+        // Query the follower table for follows and followers
+        ParseQuery<FollowerTableObject> followerQuery = ParseQuery.getQuery(FollowerTableObject.class);
+        ParseQuery<FollowerTableObject> followsQuery = ParseQuery.getQuery(FollowerTableObject.class);
+
+        // Query for followers using async count
+        followerQuery.whereEqualTo(FollowerTableObject.KEY_FOLLOWED, user);
+        followerQuery.countInBackground(new CountCallback() {
+            @Override
+            public void done(int count, ParseException e) {
+                if (e == null) {
+                    tvNumFollowers.setText(String.format(Locale.ENGLISH, "%d\nFollowers", count));
+                } else {
+                    Log.e(TAG, e.toString());
+                }
+            }
+        });
+
+        // Query for follows using async count
+        followsQuery.whereEqualTo(FollowerTableObject.KEY_FOLLOWER, user);
+        followsQuery.countInBackground(new CountCallback() {
+            @Override
+            public void done(int count, ParseException e) {
+                if (e == null) {
+                    tvNumFollowing.setText(String.format(Locale.ENGLISH, "%d\nFollowing", count));
+                } else {
+                    Log.e(TAG, e.toString());
+                }
+            }
+        });
+
+        // Query for number of posts using async callback
+        ParseQuery<Post> postParseQuery = ParseQuery.getQuery(Post.class);
+        postParseQuery.whereEqualTo(Post.KEY_USER, user);
+        postParseQuery.countInBackground(new CountCallback() {
+            @Override
+            public void done(int count, ParseException e) {
+                if (e == null) {
+                    tvNumPosts.setText(String.format(Locale.ENGLISH, "%d\nPosts", count));
+                } else {
+                    Log.e(TAG, e.toString());
+                }
+            }
+        });
 
         // Logout user and go back to log in activity when log out button is clicked
         btnLogOut.setOnClickListener(new View.OnClickListener() {
