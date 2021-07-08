@@ -10,6 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.parstagram.wrappers.PostWrapper;
+import com.example.parstagram.wrappers.UserWrapper;
+
+import org.parceler.Parcels;
 
 
 // Note that this activity is quite redundant since I have copied Instagram's
@@ -31,14 +35,8 @@ public class PostDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_details);
 
-        // unfortunately, Parcel doesn't work with Parse classes so I am doing this manually.
-        // Technically, I could create a class to hold the same data, but this
-        // activity is low priority (redundant) as noted above
-        String username = getIntent().getStringExtra("username");
-        String description = getIntent().getStringExtra("description");
-        String profilePictureURL = getIntent().getStringExtra("profilePictureURL");
-        String imageURL = getIntent().getStringExtra("imageURL");
-        String timestamp = getIntent().getStringExtra("timestamp");
+        UserWrapper user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        PostWrapper post = Parcels.unwrap(getIntent().getParcelableExtra("post"));
 
         ivProfilePicture = findViewById(R.id.ivDetailsProfilePicture);
         tvUsername = findViewById(R.id.tvDetailsUsername);
@@ -51,10 +49,10 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvTimestamp = findViewById(R.id.tvDetailsTimestamp);
 
         Glide.with(this)
-                .load(imageURL)
+                .load(post.imageUrl)
                 .into(ivPostImage);
 
-        if (profilePictureURL.equals("null")) {
+        if (user.profilePictureUrl.equals("null")) {
             Glide.with(this)
                     .load(ResourcesCompat.getDrawable(this.getResources(),
                             R.drawable.instagram_profile_default, this.getTheme()))
@@ -62,14 +60,14 @@ public class PostDetailsActivity extends AppCompatActivity {
                     .into(ivProfilePicture);
         } else {
             Glide.with(this)
-                    .load(profilePictureURL)
+                    .load(user.profilePictureUrl)
                     .circleCrop()
                     .into(ivProfilePicture);
         }
 
-        tvUsername.setText(username);
-        tvDescriptionUsername.setText(username);
-        tvDescription.setText(description);
-        tvTimestamp.setText(timestamp);
+        tvUsername.setText(user.username);
+        tvDescriptionUsername.setText(user.username);
+        tvDescription.setText(post.description);
+        tvTimestamp.setText(post.createdAt);
     }
 }

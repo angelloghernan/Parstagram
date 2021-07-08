@@ -1,6 +1,9 @@
 package com.example.parstagram.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,21 +19,31 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.parstagram.BitmapScaler;
+import com.example.parstagram.EditProfileActivity;
 import com.example.parstagram.FollowerTableObject;
 import com.example.parstagram.LoginActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.R;
+import com.example.parstagram.wrappers.UserWrapper;
 import com.parse.CountCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -46,15 +59,22 @@ public class MyProfileFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     public static final String TAG = "MyProfileFragment";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_BIO = "bio";
+
+    public static final int EDIT_PROFILE_REQUEST_CODE = 99;
 
     private String mParam1;
     private String mParam2;
 
     Button btnLogOut;
+    Button btnEditProfile;
     ImageView ivProfileDetailsPicture;
     TextView tvNumFollowers;
     TextView tvNumFollowing;
     TextView tvNumPosts;
+    TextView tvName;
+    TextView tvBio;
 
     public MyProfileFragment() {
         // Required empty public constructor
@@ -97,14 +117,30 @@ public class MyProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         btnLogOut = view.findViewById(R.id.btnLogOut);
+        btnEditProfile = view.findViewById(R.id.btnEditProfile);
         ivProfileDetailsPicture = view.findViewById(R.id.ivProfileDetailsPicture);
         tvNumFollowers = view.findViewById(R.id.tvNumFollowers);
         tvNumFollowing = view.findViewById(R.id.tvNumFollowing);
         tvNumPosts = view.findViewById(R.id.tvNumPosts);
+        tvName = view.findViewById(R.id.tvName);
+        tvBio = view.findViewById(R.id.tvBio);
 
         ParseUser user = ParseUser.getCurrentUser();
-        ParseFile profilePicture = user.getParseFile("profilePicture");
+        user.fetchInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    tvBio.setText(user.getString(KEY_BIO));
+                    tvName.setText(user.getString(KEY_NAME));
+                } else {
+                    Log.e(TAG, e.toString());
+                }
+            }
+        });
 
+        ParseFile profilePicture = user.getParseFile("profilePicture");
+        // if their profile picture doesn't exist, load the default "empty" profile picture
+        // else, load their profile picture
         if (profilePicture != null) {
             Glide.with(view.getContext())
                     .load(Objects.requireNonNull(profilePicture.getUrl()))
@@ -164,6 +200,26 @@ public class MyProfileFragment extends Fragment {
             }
         });
 
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(view.getContext(), EditProfileActivity.class);
+
+                // Wrap user info so it can be parceled and passed to intent
+                String profilePictureURL = "null";
+                if (user.getParseFile("profilePicture") != null) {
+                    profilePictureURL = Objects.requireNonNull(user.getParseFile("profilePicture")).getUrl();
+                }
+                UserWrapper parcelableUser = new UserWrapper(user.getObjectId(), user.getUsername(),
+                        profilePictureURL);
+                parcelableUser.bio = user.getString("bio");
+
+                // Finally, put the user in the intent and begin the activity
+                i.putExtra("user", Parcels.wrap(parcelableUser));
+                startActivityForResult(i, EDIT_PROFILE_REQUEST_CODE);
+            }
+        });
+
         // Logout user and go back to log in activity when log out button is clicked
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,4 +230,17 @@ public class MyProfileFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_PROFILE_REQUEST_CODE) {
+            if (resultCode == android.app.Activity.RESULT_OK) {
+
+            } else { // Result was a failure
+                Toast.makeText(getContext(), "Error editing profile", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

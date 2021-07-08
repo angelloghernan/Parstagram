@@ -20,6 +20,8 @@ import com.example.parstagram.Post;
 import com.example.parstagram.PostAdapter;
 import com.example.parstagram.PostDetailsActivity;
 import com.example.parstagram.R;
+import com.example.parstagram.wrappers.PostWrapper;
+import com.example.parstagram.wrappers.UserWrapper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -128,18 +130,21 @@ public class HomeFragment extends Fragment {
         @Override
         public void onAdapterSelected(int pos, Post post) {
             Intent intent = new Intent(getContext(), PostDetailsActivity.class);
-            // Post is not parcelable, so I have to resort to manual putExtra unfortunately
             ParseUser user = post.getUser();
-            intent.putExtra("username", user.getUsername());
-            intent.putExtra("description", post.getDescription());
+
             String profilePictureURL = "null";
             if (user.getParseFile("profilePicture") != null) {
                 profilePictureURL = Objects.requireNonNull(user.getParseFile("profilePicture")).getUrl();
             }
-            intent.putExtra("profilePictureURL",
+
+            UserWrapper parcelableUser = new UserWrapper(user.getObjectId(), user.getUsername(),
                     profilePictureURL);
-            intent.putExtra("imageURL", post.getImage().getUrl());
-            intent.putExtra("timestamp", Post.calculateTimeAgo(post.getCreatedAt()));
+            PostWrapper parcelablePost = new PostWrapper(post.getDescription(), post.getObjectId(), post.getImage().getUrl(),
+                    user.getObjectId(), Post.calculateTimeAgo(post.getCreatedAt()));
+
+            intent.putExtra("user", Parcels.wrap(parcelableUser));
+            intent.putExtra("post", Parcels.wrap(parcelablePost));
+
             startActivityForResult(intent, DETAILS_REQUEST_CODE);
         }
     };

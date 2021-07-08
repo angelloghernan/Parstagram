@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#FFFFFF"
+    android:backgroundTint="@color/design_default_color_on_primary"
     tools:context=".fragments.MyProfileFragment">
 
     <Button
         android:id="@+id/btnLogOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button"
+        android:layout_below="@+id/btnEditProfile"
         android:layout_alignParentEnd="true"
         android:layout_gravity="center"
-        android:layout_marginTop="405dp"
-        android:layout_marginEnd="26dp"
+        android:layout_marginTop="158dp"
+        android:layout_marginEnd="32dp"
         android:text="Log Out" />
 
     <ImageView
@@ -36,7 +36,6 @@
         android:layout_alignStart="@+id/ivProfileDetailsPicture"
         android:layout_marginStart="0dp"
         android:layout_marginTop="5dp"
-        android:text="User's Name"
         android:textStyle="bold" />
 
     <TextView
@@ -46,8 +45,7 @@
         android:layout_below="@+id/tvName"
         android:layout_alignStart="@+id/tvName"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="5dp"
-        android:text="User Bio" />
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:id="@+id/tvNumPosts"
@@ -86,7 +84,7 @@
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnEditProfile"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

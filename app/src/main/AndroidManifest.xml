@@ -21,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Parstagram">
-        <activity android:name=".PostDetailsActivity"></activity>
+        <activity android:name=".EditProfileActivity"></activity>
+        <activity android:name=".PostDetailsActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -50,9 +51,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:label="">
-        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label=""></activity>
     </application>
 
 </manifest>
