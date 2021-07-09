@@ -181,7 +181,7 @@ public class ComposeFragment extends Fragment {
                 Uri takenPhotoUri = Uri.fromFile(getPhotoFileUri(photoFileName));
                 // by this point we have the camera photo on disk
                 Bitmap rawTakenImage = BitmapFactory.decodeFile(takenPhotoUri.getPath());
-                // See BitmapScaler.java: https://gist.github.com/nesquena/3885707fd3773c09f1bb
+                // See BitmapScaler.java; source: https://gist.github.com/nesquena/3885707fd3773c09f1bb
                 Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, 100);
 
                 // Configure byte output stream
@@ -200,7 +200,7 @@ public class ComposeFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                // Load the taken image into a preview
+                // Load the taken image into a preview -- we did all the resizing so that less memory was taken
                 ivPreview.setImageBitmap(resizedBitmap);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();

@@ -103,6 +103,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public void bind(Post post) {
             ParseUser user = post.getUser();
             ParseFile profilePicture = user.getParseFile("profilePicture");
+
+            // Load profile picture -- if null use the placeholder
             if (profilePicture != null) {
                 Glide.with(context)
                         .load(profilePicture.getUrl())
@@ -115,6 +117,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         .circleCrop()
                         .into(ivProfilePicture);
             }
+            // load post image
             if (post.getImage() != null) {
                 ivPostImage.setVisibility(View.VISIBLE);
                 Glide.with(context)
@@ -142,6 +145,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
     }
 
+    // adapter callback interface so that we can handle clicks and call intents in the
+    // home fragment
     public interface AdapterCallback {
         void onAdapterSelected(int pos, Post post);
         void onUserSelected(ParseUser user);

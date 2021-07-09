@@ -65,14 +65,6 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -86,6 +78,9 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // boiler plate code for fragment
+        // could delete, but if i ever want to use parameters when creating a new fragment instance
+        // i would need this
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -154,7 +149,8 @@ public class HomeFragment extends Fragment {
             UserWrapper parcelableUser = new UserWrapper(user.getObjectId(), user.getUsername(),
                     getProfilePictureUrl(user));
 
-            // should change later to async callback, currently this has very little time to execute
+            // could change later to async callback in UserProfileActivity if it becomes troublesome,
+            // currently this takes very little time to execute
             parcelableUser.name = user.getString("name");
             parcelableUser.bio = user.getString("bio");
 
@@ -190,13 +186,6 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "Issue with getting posts", e);
                     return;
                 }
-
-                // for debugging purposes: print every post description to log
-                /*
-                for (Post post : posts) {
-                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
-                }
-                 */
 
                 // save received posts to list and notify adapter of new data
                 allPosts.addAll(posts);

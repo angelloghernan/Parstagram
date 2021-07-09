@@ -58,6 +58,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     .into(ivEditProfileView);
         }
 
+        // When the submit button is pressed, load the information from the text input boxes
+        // and send the new data to the server
         btnEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

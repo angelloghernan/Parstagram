@@ -20,6 +20,8 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // initialize the parse class and register the parse subclasses so we can use it all in our code
+
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(FollowerTableObject.class);
 

@@ -15,6 +15,7 @@ public class FollowerTableObject extends ParseObject {
     public ParseUser getFollowed() {
         return getParseUser(KEY_FOLLOWED);
     }
+
     public void setFollower(ParseUser user) {put(KEY_FOLLOWER, user);}
     public void setFollowed(ParseUser user) {put(KEY_FOLLOWED, user);}
 }

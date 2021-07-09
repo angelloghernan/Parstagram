@@ -231,6 +231,8 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // After the profile is edited, update the bio and name automatically using data from the intent
+        // so we don't have to re-request the info from the server
         if (requestCode == EDIT_PROFILE_REQUEST_CODE && resultCode == android.app.Activity.RESULT_OK) {
             UserWrapper userWrapper = Parcels.unwrap(data.getParcelableExtra("user"));
             tvBio.setText(userWrapper.bio);

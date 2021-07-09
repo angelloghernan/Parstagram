@@ -32,7 +32,7 @@ import java.util.Locale;
 
 
 // Note: this activity is quite messy as of now, there's code I would definitely refactor if I were working on a
-// bigger project. But this works for now.
+// bigger project. Mostly this is because of reused code that could be separated into other classes, otherwise it's manageable.
 public class UserProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "UserProfileActivity";
@@ -202,7 +202,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-        } else if (followsQueryFinished && following) {
+        } else if (followsQueryFinished) {
             ParseQuery<FollowerTableObject> unfollowQuery = ParseQuery.getQuery(FollowerTableObject.class);
             unfollowQuery.whereEqualTo("followed", displayedUser);
             unfollowQuery.whereEqualTo("follower", ParseUser.getCurrentUser());
