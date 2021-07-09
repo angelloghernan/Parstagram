@@ -213,6 +213,7 @@ public class MyProfileFragment extends Fragment {
                 UserWrapper parcelableUser = new UserWrapper(user.getObjectId(), user.getUsername(),
                         profilePictureURL);
                 parcelableUser.bio = user.getString("bio");
+                parcelableUser.name = user.getString("name");
 
                 // Finally, put the user in the intent and begin the activity
                 i.putExtra("user", Parcels.wrap(parcelableUser));
@@ -234,12 +235,10 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EDIT_PROFILE_REQUEST_CODE) {
-            if (resultCode == android.app.Activity.RESULT_OK) {
-
-            } else { // Result was a failure
-                Toast.makeText(getContext(), "Error editing profile", Toast.LENGTH_SHORT).show();
-            }
+        if (requestCode == EDIT_PROFILE_REQUEST_CODE && resultCode == android.app.Activity.RESULT_OK) {
+            UserWrapper userWrapper = Parcels.unwrap(data.getParcelableExtra("user"));
+            tvBio.setText(userWrapper.bio);
+            tvName.setText(userWrapper.name);
         }
     }
 

@@ -36,6 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -139,7 +140,7 @@ public class ComposeFragment extends Fragment {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoFile = getPhotoFileUri(photoFileName);
 
-        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.example.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(Objects.requireNonNull(getContext()), "com.example.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
@@ -150,7 +151,7 @@ public class ComposeFragment extends Fragment {
     public File getPhotoFileUri(String fileName) {
         // Get safe storage directory for photos - use external files dir so we don't need
         // external runtime read/write permissions
-        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
+        File mediaStorageDir = new File(Objects.requireNonNull(getContext()).getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
         // Create directory if it does not exist (using mkdirs)
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
@@ -188,9 +189,6 @@ public class ComposeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == android.app.Activity.RESULT_OK) {
-                // by this point we have the camera photo on disk
-                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-
                 Uri takenPhotoUri = Uri.fromFile(getPhotoFileUri(photoFileName));
                 // by this point we have the camera photo on disk
                 Bitmap rawTakenImage = BitmapFactory.decodeFile(takenPhotoUri.getPath());

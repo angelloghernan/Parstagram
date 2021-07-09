@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.parstagram.wrappers.PostWrapper;
 import com.example.parstagram.wrappers.UserWrapper;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
