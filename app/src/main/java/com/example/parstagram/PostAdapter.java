@@ -127,10 +127,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvDescription.setText(post.getDescription());
             tvDescriptionUsername.setText(user.getUsername());
             tvTimestamp.setText(Post.calculateTimeAgo(post.getCreatedAt()));
+
+            // Go to main activity so we can call UserProfileActivity in an intent
+            // when username of another user is clicked
+            if (!user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+                tvUsername.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        callback.onUserSelected(user);
+                    }
+                });
+            }
+
         }
     }
 
     public interface AdapterCallback {
         void onAdapterSelected(int pos, Post post);
+        void onUserSelected(ParseUser user);
     }
 }

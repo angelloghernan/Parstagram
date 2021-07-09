@@ -20,6 +20,7 @@ import com.example.parstagram.Post;
 import com.example.parstagram.PostAdapter;
 import com.example.parstagram.PostDetailsActivity;
 import com.example.parstagram.R;
+import com.example.parstagram.UserProfileActivity;
 import com.example.parstagram.wrappers.PostWrapper;
 import com.example.parstagram.wrappers.UserWrapper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -55,6 +56,7 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private static final int DETAILS_REQUEST_CODE = 20;
+    public static final int PROFILE_REQUEST_CODE = 21;
 
     private String mParam1;
     private String mParam2;
@@ -132,20 +134,35 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(getContext(), PostDetailsActivity.class);
             ParseUser user = post.getUser();
 
-            String profilePictureURL = "null";
-            if (user.getParseFile("profilePicture") != null) {
-                profilePictureURL = Objects.requireNonNull(user.getParseFile("profilePicture")).getUrl();
-            }
-
             UserWrapper parcelableUser = new UserWrapper(user.getObjectId(), user.getUsername(),
-                    profilePictureURL);
+                    getProfilePictureUrl(user));
             PostWrapper parcelablePost = new PostWrapper(post.getDescription(), post.getObjectId(), post.getImage().getUrl(),
                     user.getObjectId(), Post.calculateTimeAgo(post.getCreatedAt()));
 
             intent.putExtra("user", Parcels.wrap(parcelableUser));
             intent.putExtra("post", Parcels.wrap(parcelablePost));
 
+            // Using startActivityForResult if I ever get to implement likes/comments
+            // (so we know if a post was liked/commented on immediately)
             startActivityForResult(intent, DETAILS_REQUEST_CODE);
+        }
+
+        @Override
+        public void onUserSelected(ParseUser user) {
+            Intent intent = new Intent(getContext(), UserProfileActivity.class);
+
+            UserWrapper parcelableUser = new UserWrapper(user.getObjectId(), user.getUsername(),
+                    getProfilePictureUrl(user));
+
+            // should change later to async callback, currently this has very little time to execute
+            parcelableUser.name = user.getString("name");
+            parcelableUser.bio = user.getString("bio");
+
+            intent.putExtra("user", Parcels.wrap(parcelableUser));
+
+            // Using startActivityForResult if I ever get to implement following user
+            // (so we can know the user was followed immediately)
+            startActivityForResult(intent, PROFILE_REQUEST_CODE);
         }
     };
 
@@ -163,6 +180,7 @@ public class HomeFragment extends Fragment {
         query.setLimit(20);
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
+
         // start an asynchronous call for posts
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -188,5 +206,14 @@ public class HomeFragment extends Fragment {
                 swipeContainer.setRefreshing(false);
             }
         });
+    }
+
+    // small helper function to get profile picture url when passing info into intents
+    public String getProfilePictureUrl(ParseUser user) {
+        String profilePictureURL = "null";
+        if (user.getParseFile("profilePicture") != null) {
+            profilePictureURL = Objects.requireNonNull(user.getParseFile("profilePicture")).getUrl();
+        }
+        return profilePictureURL;
     }
 }

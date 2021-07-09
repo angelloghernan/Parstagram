@@ -38,14 +38,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ComposeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ComposeFragment extends Fragment {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "ComposeFragment";
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 555;
     private Button btnLogOut;
     private Button btnTakePicture;
@@ -66,14 +62,7 @@ public class ComposeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ComposeFragment.
-     */
+
     public static ComposeFragment newInstance(String param1, String param2) {
         ComposeFragment fragment = new ComposeFragment();
         Bundle args = new Bundle();

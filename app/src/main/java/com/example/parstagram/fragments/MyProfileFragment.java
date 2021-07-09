@@ -80,14 +80,7 @@ public class MyProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyProfileFragment.
-     */
+    // function for creating a new instance of this fragment, unused boilerplate
     public static MyProfileFragment newInstance(String param1, String param2) {
         MyProfileFragment fragment = new MyProfileFragment();
         Bundle args = new Bundle();
@@ -156,7 +149,10 @@ public class MyProfileFragment extends Fragment {
                     .into(ivProfileDetailsPicture);
         }
 
-        // Query the follower table for follows and followers
+        // Query the follower table for follows, followers, and number of posts
+        // Normally, I would make separate columns in the user database for the number of followers
+        // and follows they have, but I lack the expertise to know how to update that on the server itself.
+        // Plus, this gave me more practice with queries
         ParseQuery<FollowerTableObject> followerQuery = ParseQuery.getQuery(FollowerTableObject.class);
         ParseQuery<FollowerTableObject> followsQuery = ParseQuery.getQuery(FollowerTableObject.class);
 
